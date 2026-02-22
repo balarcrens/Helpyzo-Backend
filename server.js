@@ -11,7 +11,7 @@ import userRoutes from './routes/userRoutes.js';
 import partnerRoutes from './routes/partnerRoutes.js';
 import categoryRoutes from './routes/categoryRoutes.js';
 import bookingRoutes from './routes/bookingRoutes.js';
-import notificationRoutes from './routes/notificationRoutes.js';  
+import notificationRoutes from './routes/notificationRoutes.js';
 
 dotenv.config();
 
@@ -22,8 +22,8 @@ connectDB();
 
 // Middleware
 app.use(cors());
-app.use(express.json({ limit: '50mb' })); // Allow large data URLs for images
-app.use(express.urlencoded({ limit: '50mb', extended: true }));
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 app.use(morganMiddleware);
 
 // API Routes
