@@ -10,6 +10,7 @@ import {
     changePassword,
     getAllUsers,
     deleteUser,
+    ChangeRole,
     updateServiceApprovalStatus,
 } from '../controllers/userController.js';
 
@@ -46,5 +47,6 @@ router.put('/change-password', authenticate, changePassword);
 router.get('/all', authenticate, authorize('superadmin'), getAllUsers);
 router.delete('/:id', authenticate, authorize('superadmin'), deleteUser);
 router.put('/service-approval/:partnerId/:serviceId', authenticate, authorize('superadmin'), updateServiceApprovalStatus);
+router.put('/change-role/:id/:role', authenticate, authorize('superadmin'), ChangeRole);
 
 export default router;

@@ -11,17 +11,17 @@ import {
 
 const router = express.Router();
 
-router.get('/', authenticate, authorize('customer', 'partner', 'superadmin'), getMyNotifications);
+router.get('/', authenticate, authorize('client', 'partner', 'superadmin'), getMyNotifications);
 
-router.patch('/:id/read', authenticate, authorize('customer', 'partner', 'superadmin'),
+router.patch('/:id/read', authenticate, authorize('client', 'partner', 'superadmin'),
     param('id').isMongoId().withMessage('Invalid notification id'),
     handleValidationErrors,
     markAsRead
 );
 
-router.patch('/readall', authenticate, authorize('customer', 'partner', 'superadmin'), markAllAsRead);
+router.patch('/readall', authenticate, authorize('client', 'partner', 'superadmin'), markAllAsRead);
 
-router.delete('/:id', authenticate, authorize('customer', 'partner', 'superadmin'),
+router.delete('/:id', authenticate, authorize('client', 'partner', 'superadmin'),
     param('id').isMongoId().withMessage('Invalid notification id'),
     handleValidationErrors,
     deleteNotification

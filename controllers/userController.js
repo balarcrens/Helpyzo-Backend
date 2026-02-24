@@ -118,7 +118,7 @@ export const getUserProfile = async (req, res, next) => {
 export const updateUserProfile = async (req, res, next) => {
     try {
         const { name, phone, address, profileImage } = req.body;
-
+        console.log(req.body);
         const user = await User.findByIdAndUpdate(
             req.user.id,
             { name, phone, address, profileImage },
@@ -206,12 +206,32 @@ export const deleteUser = async (req, res, next) => {
     }
 };
 
+export const ChangeRole = async (req, res, next) => {
+    try {
+        const { id, role } = req.params;
+        const user = await User.findByIdAndUpdate(id, { role }, { new: true, runValidators: true });
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                message: 'User not found',
+            });
+        }
+        res.status(200).json({
+            success: true,
+            message: 'Role changed successfully',
+            user,
+        });
+    } catch (error) {
+        next(error);
+    }
+}
+
 // Update Service Approval Status (for superadmin)
 export const updateServiceApprovalStatus = async (req, res, next) => {
     try {
         const { partnerId, serviceId } = req.params;
         const { approvalStatus, rejectionReason } = req.body;
-        
+
         const partner = await Partner.findById(partnerId);
         if (!partner) {
             return res.status(404).json({

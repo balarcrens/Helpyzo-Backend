@@ -1,6 +1,6 @@
 import express from 'express';
 import { body } from 'express-validator';
-import { authenticate } from '../middleware/auth.js';
+import { authenticate, authorize } from '../middleware/auth.js';
 import { handleValidationErrors } from '../middleware/validation.js';
 import {
     createBooking,
@@ -12,6 +12,7 @@ import {
     getPartnerBookings,
     deleteBooking,
     rateBooking,
+    updateBookingPaymentStatus,
 } from '../controllers/bookingController.js';
 
 const router = express.Router();
@@ -36,5 +37,6 @@ router.put('/:id', authenticate, updateBooking);
 router.put('/:id/status', authenticate, updateBookingStatus);
 router.put('/:id/rate', authenticate, rateBooking);
 router.delete('/:id', authenticate, deleteBooking);
+router.put('/payment-status/:id', authenticate, authorize('partner'), updateBookingPaymentStatus)
 
 export default router;
