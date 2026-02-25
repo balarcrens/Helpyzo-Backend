@@ -61,14 +61,19 @@ const partnerSchema = new mongoose.Schema(
                 type: String,
                 trim: true,
             },
-            phone: {
+            yearsOfExperience: {
                 type: String,
                 trim: true,
+                default: "0"
             },
-            contact: {
-                type: String,
-                trim: true,
-            },
+            servicestype: [
+                {
+                    category: {
+                        type: mongoose.Schema.Types.ObjectId,
+                        ref: 'Category',
+                    },
+                }
+            ]
         },
         services: [
             {

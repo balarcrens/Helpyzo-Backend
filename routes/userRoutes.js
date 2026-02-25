@@ -12,6 +12,7 @@ import {
     deleteUser,
     ChangeRole,
     updateServiceApprovalStatus,
+    changeStatus,
 } from '../controllers/userController.js';
 
 const router = express.Router();
@@ -42,6 +43,7 @@ router.post('/login', loginValidation, handleValidationErrors, loginUser);
 router.get('/profile', authenticate, getUserProfile);
 router.put('/profile', authenticate, updateValidation, handleValidationErrors, updateUserProfile);
 router.put('/change-password', authenticate, changePassword);
+router.put('/change-status/:id/:status', authenticate, changeStatus);
 
 // Superadmin routes
 router.get('/all', authenticate, authorize('superadmin'), getAllUsers);

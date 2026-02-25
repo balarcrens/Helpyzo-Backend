@@ -21,6 +21,7 @@ export const registerPartner = async (req, res, next) => {
 			address,
 			business,
 			profileImage,
+			paymentMethods,
 			documents,
 		} = req.body;
 
@@ -53,6 +54,7 @@ export const registerPartner = async (req, res, next) => {
 			address,
 			business,
 			profileImage,
+			paymentMethods,
 			documents: formattedDocuments,
 			verified: false,
 		});

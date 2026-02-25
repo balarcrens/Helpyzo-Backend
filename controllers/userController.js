@@ -117,8 +117,7 @@ export const getUserProfile = async (req, res, next) => {
 // Update User Profile
 export const updateUserProfile = async (req, res, next) => {
     try {
-        const { name, phone, address, profileImage } = req.body;
-        console.log(req.body);
+        const { name, phone, address, profileImage } = req.body.userData;
         const user = await User.findByIdAndUpdate(
             req.user.id,
             { name, phone, address, profileImage },
@@ -268,3 +267,32 @@ export const updateServiceApprovalStatus = async (req, res, next) => {
         });
     }
 }
+
+export const changeStatus = async (req, res, next) => {
+    try {
+        const { id, status } = req.params;
+
+        const isActive = status === 'true';
+
+        const user = await User.findByIdAndUpdate(
+            id,
+            { isActive },
+            { new: true, runValidators: true }
+        );
+
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                message: 'User not found',
+            });
+        }
+
+        res.status(200).json({
+            success: true,
+            message: 'Status changed successfully',
+            user,
+        });
+    } catch (error) {
+        next(error);
+    }
+};

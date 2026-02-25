@@ -12,6 +12,7 @@ import partnerRoutes from './routes/partnerRoutes.js';
 import categoryRoutes from './routes/categoryRoutes.js';
 import bookingRoutes from './routes/bookingRoutes.js';
 import notificationRoutes from './routes/notificationRoutes.js';
+import contactRoutes from './routes/contactRoutes.js';
 
 dotenv.config();
 
@@ -32,6 +33,7 @@ app.use('/api/partners', partnerRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/bookings', bookingRoutes);
 app.use('/api/notifications', notificationRoutes);
+app.use('/api/contact', contactRoutes);
 
 // Health check route
 app.get('/health', (req, res) => {
