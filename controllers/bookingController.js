@@ -282,28 +282,73 @@ export const rateBooking = async (req, res, next) => {
             });
         }
 
-        // Update partner's rating
-        const Partner = require('../models/Partner.js').default;
+        // Update partner's overall rating
+        const partnerId = booking.partner?._id || booking.partner;
+        const serviceId = booking.serviceId?._id || booking.serviceId;
+
         const completedBookings = await Booking.countDocuments({
-            partner: booking.partner._id,
+            partner: partnerId,
             status: 'completed',
         });
 
         const totalRating = await Booking.aggregate([
-            { $match: { partner: booking.partner._id, rating: { $exists: true } } },
+            { $match: { partner: partnerId, rating: { $exists: true } } },
             { $group: { _id: null, avgRating: { $avg: '$rating' } } },
         ]);
 
-        await Partner.findByIdAndUpdate(booking.partner._id, {
-            completedBookings,
-            rating: totalRating[0]?.avgRating || 0,
-            totalRatings: await Booking.countDocuments({ partner: booking.partner._id, rating: { $exists: true } }),
-        });
+        const partnerTotalRatings = await Booking.countDocuments({ partner: partnerId, rating: { $exists: true } });
+
+        // Update specific service rating
+        const serviceTotalRating = await Booking.aggregate([
+            { $match: { partner: partnerId, serviceId: serviceId, rating: { $exists: true } } },
+            { $group: { _id: null, avgRating: { $avg: '$rating' } } },
+        ]);
+        const serviceTotalRatingsCount = await Booking.countDocuments({ partner: partnerId, serviceId: serviceId, rating: { $exists: true } });
+
+        await Partner.updateOne(
+            { _id: partnerId, "services._id": serviceId },
+            {
+                $set: {
+                    completedBookings,
+                    rating: totalRating[0]?.avgRating || 0,
+                    totalRatings: partnerTotalRatings,
+                    "services.$.rating": serviceTotalRating[0]?.avgRating || 0,
+                    "services.$.totalRatings": serviceTotalRatingsCount,
+                }
+            }
+        );
 
         res.status(200).json({
             success: true,
             message: 'Rating added successfully',
             booking,
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+// Get Partner Reviews
+export const getPartnerReviews = async (req, res, next) => {
+    try {
+        const { partnerId } = req.params;
+
+        if (!partnerId) {
+            return res.status(400).json({
+                success: false,
+                message: "Invalid or missing partnerId",
+            });
+        }
+
+        const reviews = await Booking.find({ partner: partnerId, rating: { $exists: true } })
+            .populate("user", "name profileImage")
+            .select("rating review user serviceName createdAt")
+            .sort({ createdAt: -1 });
+
+        res.status(200).json({
+            success: true,
+            count: reviews.length,
+            reviews,
         });
     } catch (error) {
         next(error);

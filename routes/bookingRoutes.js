@@ -13,6 +13,7 @@ import {
     deleteBooking,
     rateBooking,
     updateBookingPaymentStatus,
+    getPartnerReviews,
 } from '../controllers/bookingController.js';
 
 const router = express.Router();
@@ -31,6 +32,7 @@ router.get('/', authenticate, getAllBookings);
 // Dynamic routes BEFORE :id routes (important for routing order)
 router.get('/my-bookings', authenticate, getUserBookings);
 router.get('/partner/:partnerId/bookings', authenticate, getPartnerBookings);
+router.get('/partner/:partnerId/reviews', getPartnerReviews);
 
 router.get('/:id', authenticate, getBookingById);
 router.put('/:id', authenticate, updateBooking);
