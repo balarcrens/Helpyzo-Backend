@@ -1,0 +1,7 @@
+PORT=5000
+MONGODB_URI=mongodb+srv://balarcrens:Crens446@cluster0.tepwhhp.mongodb.net/Helpyzo?retryWrites=true&w=majority
+JWT_SECRET=Helpyzo-Backend-JWT
+JWT_EXPIRE=7d
+NODE_ENV=development
+VITE_RAZORPAY_KEY_ID=rzp_test_SL8zQiJKiptbP9
+VITE_RAZORPAY_SECRET_KEY=xuhHuc3TSWISkh3jFLOcq5Lj
